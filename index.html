@@ -1,9 +1,9 @@
-<!-- Save this as index.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <title>Yash's Workout Tracker</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <style>
     body {
       font-family: 'Segoe UI', sans-serif;
@@ -14,17 +14,24 @@
     h1 {
       text-align: center;
       color: #fff;
+      text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
     }
-    a {
+    .nav-button {
       display: block;
       text-align: center;
-      margin-bottom: 2rem;
-      text-decoration: none;
+      margin: 0 auto 2rem auto;
+      width: max-content;
+      padding: 10px 20px;
+      background: #fffbe1;
       font-weight: bold;
-      color: #333;
-      background: #fff5e1;
-      padding: 10px;
       border-radius: 8px;
+      text-decoration: none;
+      color: #444;
+      box-shadow: 0 0 5px rgba(0,0,0,0.15);
+      transition: background 0.3s;
+    }
+    .nav-button:hover {
+      background: #ffeeae;
     }
     form, table {
       max-width: 700px;
@@ -32,38 +39,51 @@
       background: #fff;
       padding: 1.5rem;
       border-radius: 12px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      box-shadow: 0 0 12px rgba(0,0,0,0.1);
     }
     label {
-      font-weight: bold;
       display: block;
-      margin: 1rem 0 0.5rem;
+      margin-top: 1rem;
+      font-weight: bold;
     }
     input, select {
       width: 100%;
       padding: 0.6rem;
-      border-radius: 6px;
+      margin-top: 0.4rem;
+      border-radius: 5px;
       border: 1px solid #ccc;
     }
     button {
       margin-top: 1rem;
       width: 100%;
       padding: 0.8rem;
-      border: none;
       background: #ff7e67;
       color: white;
       font-size: 1rem;
+      border: none;
       border-radius: 6px;
       cursor: pointer;
+      transition: background 0.3s;
+    }
+    button:hover {
+      background: #e86450;
+    }
+    .btn-row {
+      display: flex;
+      gap: 10px;
+      margin-top: 1rem;
+    }
+    .btn-row button {
+      flex: 1;
     }
     table {
-      margin-top: 2rem;
       width: 100%;
       border-collapse: collapse;
+      margin-top: 2rem;
     }
     th, td {
       padding: 0.7rem;
-      border: 1px solid #ccc;
+      border: 1px solid #ddd;
       text-align: center;
     }
     th {
@@ -74,7 +94,8 @@
 </head>
 <body>
   <h1>💪 Yash's Workout Tracker</h1>
-  <a href="routine.html">Go to Daily Routine</a>
+  <a href="routine.html" class="nav-button">Go to Daily Routine →</a>
+
   <form id="workoutForm">
     <label for="date">Date:</label>
     <input type="date" id="date" required />
@@ -88,7 +109,7 @@
     <label for="sets">Sets:</label>
     <input type="number" id="sets" min="1" required />
 
-    <label for="type">Type of Workout:</label>
+    <label for="type">Workout Type:</label>
     <select id="type" required>
       <option value="" disabled selected>Select workout</option>
       <option>Cardio</option>
@@ -98,10 +119,13 @@
       <option>Core</option>
     </select>
 
-    <button type="submit">Add Workout</button>
+    <div class="btn-row">
+      <button type="submit">Add Workout</button>
+      <button type="button" onclick="clearWorkouts()" style="background:#aaa;">Clear All</button>
+    </div>
   </form>
 
-  <table>
+  <table id="workoutTable">
     <thead>
       <tr>
         <th>Date</th>
@@ -111,31 +135,54 @@
         <th>Type</th>
       </tr>
     </thead>
-    <tbody id="workoutTableBody"></tbody>
+    <tbody></tbody>
   </table>
 
   <script>
     const form = document.getElementById("workoutForm");
-    const table = document.getElementById("workoutTableBody");
+    const tableBody = document.querySelector("#workoutTable tbody");
 
+    // Load saved workouts on page load
+    window.addEventListener("DOMContentLoaded", () => {
+      const savedWorkouts = JSON.parse(localStorage.getItem("workouts")) || [];
+      savedWorkouts.forEach(entry => appendToTable(entry));
+    });
+
+    // Add new workout
     form.addEventListener("submit", e => {
       e.preventDefault();
-      const data = [
-        document.getElementById("date").value,
-        document.getElementById("time").value,
-        document.getElementById("duration").value,
-        document.getElementById("sets").value,
-        document.getElementById("type").value
-      ];
-      const row = document.createElement("tr");
-      data.forEach(item => {
-        const cell = document.createElement("td");
-        cell.textContent = item;
-        row.appendChild(cell);
-      });
-      table.appendChild(row);
+      const workout = {
+        date: document.getElementById("date").value,
+        time: document.getElementById("time").value,
+        duration: document.getElementById("duration").value,
+        sets: document.getElementById("sets").value,
+        type: document.getElementById("type").value
+      };
+      appendToTable(workout);
+      saveWorkout(workout);
       form.reset();
     });
+
+    function appendToTable({date, time, duration, sets, type}) {
+      const row = tableBody.insertRow();
+      [date, time, duration, sets, type].forEach(data => {
+        const cell = row.insertCell();
+        cell.textContent = data;
+      });
+    }
+
+    function saveWorkout(entry) {
+      const current = JSON.parse(localStorage.getItem("workouts")) || [];
+      current.push(entry);
+      localStorage.setItem("workouts", JSON.stringify(current));
+    }
+
+    function clearWorkouts() {
+      if (confirm("Clear all workout entries?")) {
+        localStorage.removeItem("workouts");
+        tableBody.innerHTML = "";
+      }
+    }
   </script>
 </body>
 </html>
