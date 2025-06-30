@@ -1,63 +1,69 @@
+<!-- Save this as index.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Yash's Sunset Workout Tracker</title>
+  <title>Yash's Workout Tracker</title>
   <style>
     body {
       font-family: 'Segoe UI', sans-serif;
-      margin: 0;
-      padding: 2rem;
       background: linear-gradient(to top, #fd746c, #ff9068, #ffe47a);
-      color: #333;
+      padding: 2rem;
+      margin: 0;
     }
     h1 {
       text-align: center;
       color: #fff;
-      text-shadow: 1px 1px 3px rgba(0,0,0,0.4);
+    }
+    a {
+      display: block;
+      text-align: center;
+      margin-bottom: 2rem;
+      text-decoration: none;
+      font-weight: bold;
+      color: #333;
+      background: #fff5e1;
+      padding: 10px;
+      border-radius: 8px;
     }
     form, table {
       max-width: 700px;
-      margin: 2rem auto;
-      background: rgba(255, 255, 255, 0.95);
-      padding: 2rem;
+      margin: auto;
+      background: #fff;
+      padding: 1.5rem;
       border-radius: 12px;
-      box-shadow: 0 0 15px rgba(0,0,0,0.2);
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
     }
     label {
-      display: block;
-      margin-bottom: 0.5rem;
       font-weight: bold;
+      display: block;
+      margin: 1rem 0 0.5rem;
     }
     input, select {
       width: 100%;
       padding: 0.6rem;
-      margin-bottom: 1rem;
+      border-radius: 6px;
       border: 1px solid #ccc;
-      border-radius: 5px;
     }
     button {
+      margin-top: 1rem;
       width: 100%;
       padding: 0.8rem;
-      background: #e86143;
-      color: white;
       border: none;
+      background: #ff7e67;
+      color: white;
       font-size: 1rem;
+      border-radius: 6px;
       cursor: pointer;
-      border-radius: 5px;
-    }
-    button:hover {
-      background: #cc4e32;
     }
     table {
+      margin-top: 2rem;
       width: 100%;
       border-collapse: collapse;
-      margin-top: 2rem;
     }
     th, td {
-      padding: 0.8rem;
-      border: 1px solid #ddd;
+      padding: 0.7rem;
+      border: 1px solid #ccc;
       text-align: center;
     }
     th {
@@ -67,7 +73,8 @@
   </style>
 </head>
 <body>
-  <h1>🌅 Yash's Sunset Workout Tracker</h1>
+  <h1>💪 Yash's Workout Tracker</h1>
+  <a href="routine.html">Go to Daily Routine</a>
   <form id="workoutForm">
     <label for="date">Date:</label>
     <input type="date" id="date" required />
@@ -94,7 +101,7 @@
     <button type="submit">Add Workout</button>
   </form>
 
-  <table id="workoutTable">
+  <table>
     <thead>
       <tr>
         <th>Date</th>
@@ -104,28 +111,29 @@
         <th>Type</th>
       </tr>
     </thead>
-    <tbody></tbody>
+    <tbody id="workoutTableBody"></tbody>
   </table>
 
   <script>
     const form = document.getElementById("workoutForm");
-    const table = document.getElementById("workoutTable").getElementsByTagName("tbody")[0];
+    const table = document.getElementById("workoutTableBody");
 
-    form.addEventListener("submit", function (e) {
+    form.addEventListener("submit", e => {
       e.preventDefault();
-
-      const date = document.getElementById("date").value;
-      const time = document.getElementById("time").value;
-      const duration = document.getElementById("duration").value;
-      const sets = document.getElementById("sets").value;
-      const type = document.getElementById("type").value;
-
-      const newRow = table.insertRow();
-      [date, time, duration, sets, type].forEach(data => {
-        const cell = newRow.insertCell();
-        cell.textContent = data;
+      const data = [
+        document.getElementById("date").value,
+        document.getElementById("time").value,
+        document.getElementById("duration").value,
+        document.getElementById("sets").value,
+        document.getElementById("type").value
+      ];
+      const row = document.createElement("tr");
+      data.forEach(item => {
+        const cell = document.createElement("td");
+        cell.textContent = item;
+        row.appendChild(cell);
       });
-
+      table.appendChild(row);
       form.reset();
     });
   </script>
