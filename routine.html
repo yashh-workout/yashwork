@@ -1,0 +1,139 @@
+<!-- Save this as routine.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Yash's Daily Routine</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(to bottom, #ffe47a, #ff9068, #fd746c);
+      padding: 2rem;
+      margin: 0;
+    }
+    h1 {
+      text-align: center;
+      color: #333;
+    }
+    a {
+      display: block;
+      text-align: center;
+      margin-bottom: 2rem;
+      text-decoration: none;
+      font-weight: bold;
+      color: #333;
+      background: #fff5e1;
+      padding: 10px;
+      border-radius: 8px;
+    }
+    form, table {
+      max-width: 700px;
+      margin: auto;
+      background: #fff;
+      padding: 1.5rem;
+      border-radius: 12px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    label {
+      font-weight: bold;
+      display: block;
+      margin: 1rem 0 0.5rem;
+    }
+    input, textarea {
+      width: 100%;
+      padding: 0.6rem;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+    }
+    button {
+      margin-top: 1rem;
+      width: 100%;
+      padding: 0.8rem;
+      border: none;
+      background: #ff7e67;
+      color: white;
+      font-size: 1rem;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    table {
+      margin-top: 2rem;
+      width: 100%;
+      border-collapse: collapse;
+    }
+    th, td {
+      padding: 0.7rem;
+      border: 1px solid #ccc;
+      text-align: center;
+    }
+    th {
+      background: #f27a54;
+      color: white;
+    }
+  </style>
+</head>
+<body>
+  <h1>📅 Yash's Daily Routine</h1>
+  <a href="index.html">← Back to Workout Tracker</a>
+  <form id="routineForm">
+    <label for="routine-date">Date:</label>
+    <input type="date" id="routine-date" required />
+
+    <label for="wake">Wake Time:</label>
+    <input type="time" id="wake" required />
+
+    <label for="sleep">Sleep Time:</label>
+    <input type="time" id="sleep" required />
+
+    <label for="meals">Meals:</label>
+    <input type="text" id="meals" placeholder="e.g. Oats, Salad, Dal-Rice" required />
+
+    <label for="focus">Focus Activity:</label>
+    <input type="text" id="focus" placeholder="e.g. Gym, Study, Coding" required />
+
+    <label for="notes">Notes:</label>
+    <textarea id="notes" rows="3" placeholder="Reflection, mood, etc."></textarea>
+
+    <button type="submit">Add Routine</button>
+  </form>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Date</th>
+        <th>Wake</th>
+        <th>Sleep</th>
+        <th>Meals</th>
+        <th>Focus</th>
+        <th>Notes</th>
+      </tr>
+    </thead>
+    <tbody id="routineTableBody"></tbody>
+  </table>
+
+  <script>
+    const routineForm = document.getElementById("routineForm");
+    const routineTable = document.getElementById("routineTableBody");
+
+    routineForm.addEventListener("submit", e => {
+      e.preventDefault();
+      const data = [
+        document.getElementById("routine-date").value,
+        document.getElementById("wake").value,
+        document.getElementById("sleep").value,
+        document.getElementById("meals").value,
+        document.getElementById("focus").value,
+        document.getElementById("notes").value
+      ];
+      const row = document.createElement("tr");
+      data.forEach(item => {
+        const cell = document.createElement("td");
+        cell.textContent = item;
+        row.appendChild(cell);
+      });
+      routineTable.appendChild(row);
+      routineForm.reset();
+    });
+  </script>
+</body>
+</
